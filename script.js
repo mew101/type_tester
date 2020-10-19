@@ -1,23 +1,24 @@
 const testWrapper = document.querySelector(".test-wrapper");
-const textArea = document.querySelector("#test-area");
+const testArea = document.querySelector("#test-area");
 const originText = document.querySelector("#origin-text p").innerHTML;
 const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
 
-var timer = [0,0,0,0]
+var timer = [0,0,0,0];
+var interval;
 
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function leadingZero(time) {
     if (time <= 9){
-        time = "0" + time
+        time = "0" + time;
     }
     return time;
 }
 
 // Run a standard minute/second/hundredths timer:
 function startTimer() {
-    let currentTime = timer[0]+ ":" + timer[1]+ ":" + timer[2]+ ":"
+    let currentTime = leadingZero(timer[0])+ ":" + leadingZero(timer[1])+ ":" + leadingZero(timer[2]);
     theTimer.innerHTML = currentTime;
     timer[3]++;
 
@@ -28,16 +29,28 @@ function startTimer() {
  
 
 // Match the text entered with the provided text on the page:
-function spellcheck() {
-    let textEntered = textArea.value;
-    console.log(textEntered)
+function spellCheck() {
+    let textEntered = testArea.value;
+    let originTextMatch = originText.substring(0,textEntered.length);
+
+    if (textEntered == originText) {
+        clearInterval(interval);
+        testWrapper.style.borderColor = "#429890";
+    } else {
+        if (textEntered == originTextMatch) {
+            testWrapper.style.borderColor = "#65CCf3";
+        } else {
+            testWrapper.style.borderColor = "#E95D0F";
+        }
+    }
+
 }
 
 // Start the timer:
 function start(){
-    let textEnteredLength = textArea.value.length;
+    let textEnteredLength = testArea.value.length;
     if (textEnteredLength === 0) {
-        setInterval(startTimer, 10);
+        interval = setInterval(startTimer, 10);
     };
     console.log(textEnteredLength);
 }
@@ -48,6 +61,6 @@ function reset() {
 }
 
 // Event listeners for keyboard input and the reset button:
-textArea.addEventListener("keypress", start, false);
-textArea.addEventListener("keyup", spellcheck, false);
+testArea.addEventListener("keypress", start, false);
+testArea.addEventListener("keyup", spellCheck, false);
 resetButton.addEventListener("click", reset, false);
