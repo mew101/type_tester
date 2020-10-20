@@ -6,6 +6,7 @@ const theTimer = document.querySelector(".timer");
 
 var timer = [0,0,0,0];
 var interval;
+var clockRunning = false;
 
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
@@ -49,15 +50,23 @@ function spellCheck() {
 // Start the timer:
 function start(){
     let textEnteredLength = testArea.value.length;
-    if (textEnteredLength === 0) {
+    if (textEnteredLength === 0 && !clockRunning) {
+        clockRunning =
         interval = setInterval(startTimer, 10);
     };
-    console.log(textEnteredLength);
 }
+
 
 // Reset everything:
 function reset() {
-    console.log("reset button has been pressed");
+    clearInterval(interval);
+    interval = null;
+    timer[0,0,0,0];
+    clockRunning = false;
+
+    testArea.value = "";
+    theTimer.innerHTML = "00:00:00";
+    testWrapper.type.borderColor = "gray";
 }
 
 // Event listeners for keyboard input and the reset button:
